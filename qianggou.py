@@ -110,6 +110,7 @@ class QiangGou:
 			self._logger.info("Login Success! Get userid: " + self._userId)
 			return True
 		else:
+			self._userId = ''
 			self._logger.error("Can not get userid in html, login failed!")
 			return False
 
@@ -148,13 +149,19 @@ class QiangGou:
 			self._logger.error('qianggou(): '
 								+ 'qiang gou failure...')
 			return False
-		# self._logger.info("Response: " + str(response))
+		loc = 'http://app.wandafilm.com/wandaFilm/start.action'
+		if response['content-location'] == loc:
+			return False
+
+		self._logger.info("Response" + str(response))
+		self._logger.info("Content: " + content)
 		tree = lxml.html.fromstring(content)
 		result = tree.xpath("//section/p/strong/span")
 		if len(result) > 0:
 			for item in result:
 				self._logger.info(item.text)
 				print item.text
+				return False
 
 if __name__ == '__main__':
 	qg = QiangGou('合肥')
@@ -164,5 +171,9 @@ if __name__ == '__main__':
 		print "Login success......"
 	else:
 		print "Login failure......"
-	if qg.query_city():
+		exit()
+	if not qg.query_city():
+		exit()
+	while True:
 		qg.qianggou()
+

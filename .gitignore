@@ -33,3 +33,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Custom
+.cache
+.verifycode.jpg
+*.log
+*.swp
